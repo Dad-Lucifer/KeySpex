@@ -52,8 +52,16 @@ export function AreaLineChart({
   const plotWidth = width - margin.left - margin.right
   const plotHeight = height - margin.top - margin.bottom
 
-  const maxY = 1000000 // 10 Lakhs max for grid
-  const yTicks = [0, 200000, 400000, 600000, 800000, 1000000]
+  const rawMax = Math.max(...currentSeries, ...previousSeries, 1000000)
+  const maxY = Math.ceil(rawMax / 400000) * 400000 || 1000000
+  const yTicks = [
+    0,
+    Math.round(maxY * 0.2),
+    Math.round(maxY * 0.4),
+    Math.round(maxY * 0.6),
+    Math.round(maxY * 0.8),
+    maxY,
+  ]
 
   const getY = (val: number) => {
     return margin.top + plotHeight - (val / maxY) * plotHeight

@@ -22,7 +22,7 @@ export type TopbarProps = {
 export function Topbar({ onToggleSidebar, className }: TopbarProps) {
   const navigate = useNavigate()
 
-  let user = { name: "Alex Rivera", role: "Super Admin" }
+  let user = { name: "KeySpex Administrator", role: "Super Admin" }
   try {
     const raw = localStorage.getItem("keyspex_admin_user")
     if (raw) user = { ...user, ...JSON.parse(raw) }

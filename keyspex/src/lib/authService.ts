@@ -19,10 +19,11 @@ export type AuthUserData = {
 }
 
 const DEFAULT_ACCOUNTS: Array<{ username: string; password: string; name: string; role: UserRole }> = [
-  { username: "superadmin", password: "admin2026", name: "Alex Rivera", role: "Admin" },
-  { username: "admin", password: "admin2026", name: "Alex Rivera", role: "Admin" },
+  { username: "superadmin", password: "admin2026", name: "KeySpex Administrator", role: "Admin" },
+  { username: "admin", password: "admin2026", name: "KeySpex Administrator", role: "Admin" },
+  { username: "roshan", password: "admin2026", name: "Roshan Patel", role: "Admin" },
   { username: "riya.hr", password: "admin2026", name: "Riya Sharma", role: "Employee" },
-  { username: "apex.client", password: "admin2026", name: "Apex Global Rep", role: "Client" },
+  { username: "apex.client", password: "admin2026", name: "Apex Spatial Client Rep", role: "Client" },
 ]
 
 /**
@@ -51,7 +52,17 @@ export function persistLocalUser(user: AuthUserData) {
 export function getStoredUser(): AuthUserData | null {
   try {
     const raw = localStorage.getItem("keyspex_admin_user")
-    return raw ? JSON.parse(raw) : null
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    if (parsed && (parsed.name === "Alex Rivera" || !parsed.name)) {
+      parsed.name = "KeySpex Administrator"
+      try {
+        localStorage.setItem("keyspex_admin_user", JSON.stringify(parsed))
+      } catch {
+        // ignore
+      }
+    }
+    return parsed
   } catch {
     return null
   }

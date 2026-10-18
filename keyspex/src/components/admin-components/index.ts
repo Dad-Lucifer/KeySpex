@@ -34,6 +34,7 @@ export * from "./Topbar"
 export * from "./StatusBar"
 export * from "./PageHeader"
 export * from "./AdminShell"
+export * from "./CreateNewModal"
 
 // Auth Components
 export * from "./AdminDemoBadge"

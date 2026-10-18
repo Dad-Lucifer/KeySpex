@@ -16,8 +16,7 @@ export type SidebarProps = {
  * Sticky, 100dvh, scrolls nav items, user card pinned at bottom.
  */
 export function Sidebar({ className, onCloseMobile }: SidebarProps) {
-  // Retrieve user from storage if available
-  let user = { name: "Alex Rivera", role: "Super Admin", email: "superadmin@brand.com" }
+  let user = { name: "KeySpex Administrator", role: "Super Admin", email: "admin@keyspex.com" }
   try {
     const raw = localStorage.getItem("keyspex_admin_user")
     if (raw) user = { ...user, ...JSON.parse(raw) }

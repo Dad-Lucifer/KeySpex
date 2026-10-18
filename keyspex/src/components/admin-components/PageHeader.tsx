@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils"
 
 export type PageHeaderProps = {
   userName?: string
+  isLive?: boolean
+  onCreateNew?: () => void
   className?: string
 }
 
@@ -15,11 +17,21 @@ function getGreeting(): string {
 }
 
 /**
- * PageHeader — Dashboard header with greeting, demo badge, description, and action controls
+ * PageHeader — Dashboard header with greeting, live connection badge, description, and action controls
  * conforming to admin.md §10.1.4.
  */
-export function PageHeader({ userName = "Admin", className }: PageHeaderProps) {
+export function PageHeader({
+  userName = "Admin",
+  isLive = true,
+  onCreateNew,
+  className,
+}: PageHeaderProps) {
   const greeting = getGreeting()
+  const now = new Date()
+  const monthName = now.toLocaleString("en-US", { month: "short" })
+  const year = now.getFullYear()
+  const lastDay = new Date(year, now.getMonth() + 1, 0).getDate()
+  const dateRangeLabel = `This Month: ${monthName} 1 – ${monthName} ${lastDay}, ${year}`
 
   return (
     <div className={cn("flex flex-col gap-4 pb-2", className)}>
@@ -30,12 +42,12 @@ export function PageHeader({ userName = "Admin", className }: PageHeaderProps) {
             <h1 className="text-[24px] sm:text-[26px] font-bold tracking-tight text-[#090B10]">
               {greeting}, {userName}
             </h1>
-            <StatusBadge tone="info" dot>
-              Demo Environment
+            <StatusBadge tone={isLive ? "success" : "info"} dot>
+              {isLive ? "Live Database Connected" : "Connecting to Database…"}
             </StatusBadge>
           </div>
           <p className="text-[13px] sm:text-[14px] text-[#64748B]">
-            Here’s your business performance at a glance. Illustrative demo data.
+            Real-time business performance and metrics synced directly with Firestore.
           </p>
         </div>
 
@@ -47,7 +59,7 @@ export function PageHeader({ userName = "Admin", className }: PageHeaderProps) {
             className="inline-flex h-9 items-center gap-2 rounded-[10px] border border-[#DCE4F0] bg-white px-3 text-[13px] font-semibold text-[#090B10] shadow-xs hover:border-[#CBD5E1] transition-colors cursor-pointer"
           >
             <Calendar className="h-4 w-4 text-[#64748B]" strokeWidth={1.75} />
-            <span>This Month: Oct 1 – Oct 31, 2026</span>
+            <span>{dateRangeLabel}</span>
             <ChevronDown className="h-3.5 w-3.5 text-[#94A3B8]" />
           </button>
 
@@ -74,6 +86,7 @@ export function PageHeader({ userName = "Admin", className }: PageHeaderProps) {
           {/* Create New Primary Button */}
           <button
             type="button"
+            onClick={onCreateNew}
             className="inline-flex h-9 items-center gap-1.5 rounded-[10px] bg-[#0866F5] px-4 text-[13px] font-semibold text-white shadow-[0_1px_2px_rgba(8,102,245,0.30),0_8px_20px_-6px_rgba(8,102,245,0.45)] hover:bg-[#0556D1] transition-all cursor-pointer select-none"
           >
             <Plus className="h-4 w-4" strokeWidth={2} />

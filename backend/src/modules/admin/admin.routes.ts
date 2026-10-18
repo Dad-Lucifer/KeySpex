@@ -17,6 +17,7 @@ import {
   adminDeleteProject,
   adminGetImageUploadUrl,
 } from './adminProjects.controller.js';
+import { adminGetDashboardMetrics } from './adminDashboard.controller.js';
 import { db } from '../../config/firebase.js';
 import { ok } from '../../lib/response.js';
 
@@ -47,6 +48,9 @@ adminRouter.post(
 
 // ── Services ───────────────────────────────────────────────────────────────────
 adminRouter.put('/services/:slug', asyncHandler(adminUpsertService));
+
+// ── Dashboard Metrics ─────────────────────────────────────────────────────────
+adminRouter.get('/dashboard-metrics', asyncHandler(adminGetDashboardMetrics));
 
 // ── Audit logs ────────────────────────────────────────────────────────────────
 adminRouter.get(

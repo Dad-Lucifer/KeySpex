@@ -6,6 +6,9 @@ import { cn } from "@/lib/utils"
 
 export type AdminShellProps = {
   children: React.ReactNode
+  isLive?: boolean
+  lastSynced?: Date
+  onReseedBaseline?: () => void
   className?: string
 }
 
@@ -13,7 +16,13 @@ export type AdminShellProps = {
  * AdminShell — Primary layout route chrome composing Sidebar, Topbar, Main content, and StatusBar.
  * Conforms to admin.md §10.1.1.
  */
-export function AdminShell({ children, className }: AdminShellProps) {
+export function AdminShell({
+  children,
+  isLive = true,
+  lastSynced,
+  onReseedBaseline,
+  className,
+}: AdminShellProps) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
 
   return (
@@ -52,7 +61,11 @@ export function AdminShell({ children, className }: AdminShellProps) {
           {children}
 
           <div className="pt-2">
-            <StatusBar />
+            <StatusBar
+              isLive={isLive}
+              lastSynced={lastSynced}
+              onReseedBaseline={onReseedBaseline}
+            />
           </div>
         </main>
       </div>
