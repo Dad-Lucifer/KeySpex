@@ -1,0 +1,634 @@
+@import "tailwindcss";
+
+:root {
+  --background: #FFFFFF;
+  --foreground: #090B10;
+  --card: #FFFFFF;
+  --card-foreground: #090B10;
+  --popover: #FFFFFF;
+  --popover-foreground: #090B10;
+  --primary: #0866F5;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F8FAFC;
+  --secondary-foreground: #090B10;
+  --muted: #F8FAFC;
+  --muted-foreground: #64748B;
+  --accent: #E8F1FE;
+  --accent-foreground: #090B10;
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --border: #E5E7EB;
+  --input: #E5E7EB;
+  --ring: #0866F5;
+  --radius: 0.625rem;
+
+  --ks-angle: 49deg;
+  --ks-blue: #0866F5;
+  --ks-blue-hover: #0556D1;
+  --ks-blue-active: #0445A8;
+  --ks-blue-50: #F3F8FF;
+  --ks-blue-100: #E8F1FE;
+  --ks-blue-200: #D3E4FD;
+  --ks-blue-300: #A9CBFB;
+  --ks-blue-on-dark: #5B9BFF;
+  --ks-black: #090B10;
+  --ks-ink-2: #1A1F2B;
+  --ks-body: #334155;
+  --ks-muted-on-dark: #94A3B8;
+  --ks-line-on-dark: rgba(255, 255, 255, 0.12);
+  --ks-chrome-gray: #D8DEE8;
+
+  --shadow-xs: 0 1px 2px rgba(9, 11, 16, 0.04);
+  --shadow-sm: 0 1px 2px rgba(9, 11, 16, 0.04), 0 4px 12px rgba(9, 11, 16, 0.04);
+  --shadow-md: 0 2px 4px rgba(9, 11, 16, 0.04), 0 12px 32px -8px rgba(9, 11, 16, 0.10);
+  --shadow-hero: 0 4px 8px rgba(9, 11, 16, 0.04),
+                 0 24px 48px -12px rgba(9, 11, 16, 0.14),
+                 0 56px 96px -28px rgba(8, 102, 245, 0.20);
+  --shadow-cta: 0 1px 2px rgba(8, 102, 245, 0.30), 0 8px 20px -6px rgba(8, 102, 245, 0.45);
+  --shadow-cta-hover: 0 1px 2px rgba(8, 102, 245, 0.30), 0 12px 28px -8px rgba(8, 102, 245, 0.55);
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-ink: var(--ks-black);
+  --color-ks-blue: var(--ks-blue);
+  --color-ks-blue-hover: var(--ks-blue-hover);
+  --color-ks-blue-active: var(--ks-blue-active);
+  --color-ks-blue-50: var(--ks-blue-50);
+  --color-ks-blue-100: var(--ks-blue-100);
+  --color-ks-blue-200: var(--ks-blue-200);
+  --color-ks-blue-300: var(--ks-blue-300);
+  --color-ks-blue-on-dark: var(--ks-blue-on-dark);
+  --color-ks-black: var(--ks-black);
+  --color-ks-body: var(--ks-body);
+  --color-ks-muted-on-dark: var(--ks-muted-on-dark);
+  --color-ks-chrome-gray: var(--ks-chrome-gray);
+  --font-sans: var(--font-sans);
+}
+
+html {
+  scroll-padding-top: 80px;
+}
+
+/* Explicit scrollbar-none for cross-browser mobile support (iOS Safari, Chrome Android) */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--ks-body);
+  background-color: var(--background);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+.ks-fold {
+  clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 0 100%);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 600ms cubic-bezier(0.2, 0.7, 0.2, 1), transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- Hero motion: all entrance work is opt-in and settles static --- */
+@keyframes ks-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ks-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* One-time sweep: crosses the canvas once, then holds transparent. No loop. */
+@keyframes ks-sheen {
+  0% {
+    opacity: 0;
+    transform: translateX(-120%);
+  }
+  18% {
+    opacity: 0.85;
+  }
+  55% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(220%);
+  }
+}
+
+/* Draws the trend line once on load, then leaves it complete. */
+@keyframes ks-draw {
+  from {
+    stroke-dashoffset: 140;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes ks-draw-long {
+  from {
+    stroke-dashoffset: 320;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes ks-ring-in {
+  from {
+    opacity: 0;
+    transform: rotate(-24deg) scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes ks-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* steps() gives a hard on/off, so it reads as a text caret, not a throb. */
+@keyframes ks-caret {
+  0%,
+  55% {
+    opacity: 1;
+  }
+  56%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes ks-beacon {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.32;
+  }
+}
+
+@keyframes ks-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Checkmark draws itself the moment its task resolves. */
+@keyframes ks-tick-in {
+  from {
+    stroke-dashoffset: 14;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The in-flight task marker: a slow, calm breath, not a spinner. */
+@keyframes ks-breathe {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+}
+
+.ks-fade,
+.ks-rise,
+.ks-rise-late {
+  opacity: 0;
+  animation: ks-fade-in 620ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.ks-rise {
+  animation: ks-rise-in 760ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.ks-rise-late {
+  animation: ks-rise-in 760ms cubic-bezier(0.2, 0.7, 0.2, 1) 140ms both;
+}
+
+.ks-ring {
+  animation: ks-ring-in 700ms cubic-bezier(0.2, 0.7, 0.2, 1) 420ms both;
+}
+
+/* Pseudo-element sheen so the logo-free canvas still reads as "live" */
+.ks-sweep::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 38%;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(8, 102, 245, 0.10),
+    rgba(255, 255, 255, 0.55),
+    transparent
+  );
+  animation: ks-sheen 1400ms cubic-bezier(0.2, 0.7, 0.2, 1) 260ms 1 both;
+}
+
+.ks-trace {
+  stroke-dasharray: 140;
+  animation: ks-draw 1200ms cubic-bezier(0.2, 0.7, 0.2, 1) 300ms both;
+}
+
+/* Endpoint marker lands with the line, then holds. */
+.ks-dot {
+  animation: ks-pop 420ms cubic-bezier(0.2, 0.9, 0.3, 1) 1320ms both;
+}
+
+/* Understroke drawn left-to-right under the highlighted words. It animates a
+   stroke, not a transform, so the H1 box never changes and nothing reflows. */
+.ks-underline {
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  animation: ks-draw-long 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 340ms both;
+}
+
+/* The two "this product is alive" tells. Both are loops, so they stay
+   extremely cheap: opacity-only, no layout, no paint of large areas. */
+.ks-blink {
+  animation: ks-caret 1150ms steps(1, end) 900ms infinite;
+}
+
+.ks-pulse {
+  animation: ks-beacon 2400ms cubic-bezier(0.4, 0, 0.6, 1) 1400ms infinite;
+}
+
+.ks-ring-tick {
+  animation: ks-spin 40s linear 900ms infinite;
+  transform-origin: 50% 50%;
+}
+
+.ks-tick {
+  stroke-dasharray: 14;
+  animation: ks-tick-in 380ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.ks-spin-dot {
+  animation: ks-breathe 900ms cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.ks-perspective {
+  perspective: 1200px;
+}
+
+.ks-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.ks-shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.ks-shimmer-btn::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    49deg,
+    transparent 42%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 58%
+  );
+  transform: translateX(-100%);
+  transition: transform 650ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  pointer-events: none;
+}
+
+.ks-shimmer-btn:hover::after {
+  transform: translateX(100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .ks-fade,
+  .ks-rise,
+  .ks-rise-late,
+  .ks-ring {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .ks-sweep::after {
+    display: none;
+  }
+  .ks-trace,
+  .ks-underline {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .ks-dot {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  /* Loops are removed outright, not just frozen - a static caret or beacon
+     would read as a stuck cursor rather than a resting state. */
+  .ks-blink,
+  .ks-pulse,
+  .ks-ring-tick,
+  .ks-spin-dot {
+    animation: none !important;
+  }
+  /* The build sequence is state-driven, so it still resolves to 100% here -
+     only its decorative ticks are frozen. */
+  .ks-tick {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ============================================================
+   HERO REDESIGN — Dark Edition
+   New animations appended below; nothing above is touched.
+   ============================================================ */
+
+/* Word-by-word lift-and-fade reveal for the H1 and prose */
+@keyframes ks-hero-word-in {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ks-hero-word {
+  opacity: 0;
+  animation: ks-hero-word-in 760ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Accent rule: SVG stroke draws left-to-right then holds */
+@keyframes ks-hero-rule-in {
+  from { stroke-dashoffset: 64; }
+  to   { stroke-dashoffset: 0;  }
+}
+
+.ks-hero-rule {
+  stroke-dasharray: 64;
+  stroke-dashoffset: 64;
+  animation: ks-hero-rule-in 960ms cubic-bezier(0.16, 1, 0.3, 1) 280ms both;
+}
+
+/* Ambient particle field: very gentle slow float, opacity breathe */
+@keyframes ks-particle-drift {
+  0%   { transform: translateY(0px)   scale(1);    opacity: 0.14; }
+  50%  { transform: translateY(-22px) scale(1.14); opacity: 0.38; }
+  100% { transform: translateY(0px)   scale(1);    opacity: 0.14; }
+}
+
+.ks-particle {
+  animation: ks-particle-drift linear infinite;
+  will-change: transform, opacity;
+}
+
+/* Marquee proof strip: seamless continuous horizontal scroll */
+@keyframes ks-marquee-scroll {
+  from { transform: translateX(0);    }
+  to   { transform: translateX(-50%); }
+}
+
+.ks-marquee {
+  animation: ks-marquee-scroll 32s linear infinite;
+}
+
+/* Cycling word entrance — fires on key-based remount each swap */
+@keyframes ks-word-enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ks-word-enter {
+  animation: ks-word-enter 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Reduced-motion: freeze every new hero animation, expose content */
+@media (prefers-reduced-motion: reduce) {
+  .ks-hero-word {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .ks-hero-rule {
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
+  }
+  .ks-particle {
+    animation: none !important;
+    opacity: 0.22 !important;
+  }
+  .ks-marquee {
+    animation: none !important;
+  }
+  .ks-word-enter {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .ks-logo-shimmer {
+    animation: none !important;
+  }
+  .ks-orbit-spin {
+    animation: none !important;
+  }
+  .ks-halo-pulse {
+    animation: none !important;
+  }
+}
+
+/* Minimal Logo Loader Shimmer & Glow Effects */
+@keyframes ks-logo-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.ks-logo-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: ks-logo-shimmer 2.4s ease-in-out infinite;
+}
+
+@keyframes ks-orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ks-orbit-spin {
+  animation: ks-orbit-spin 6s linear infinite;
+}
+
+@keyframes ks-halo-pulse {
+  0%, 100% {
+    transform: scale(0.95);
+    opacity: 0.25;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.55;
+  }
+}
+
+.ks-halo-pulse {
+  animation: ks-halo-pulse 2.8s ease-in-out infinite;
+}
+
+/* Staggered Cinematic Letter Entrance for KeySpex (Hardware Accelerated 120fps) */
+@keyframes ks-letter-in {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) translateZ(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) translateZ(0);
+  }
+}
+
+.ks-letter-anim {
+  animation: ks-letter-in 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* Gentle ambient breathing text glow */
+@keyframes ks-word-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 16px rgba(8, 102, 245, 0.35));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px rgba(8, 102, 245, 0.65));
+  }
+}
+
+.ks-word-glow {
+  animation: ks-word-glow 3.2s ease-in-out infinite;
+}
+
+/* ============================================================
+   KeySpex Admin-only design tokens (§7.2 admin.md).
+   Never used on the landing page.
+   ============================================================ */
+:root {
+  /* surfaces */
+  --adm-page: #FFFFFF;
+  --adm-sidebar: #F8FAFC;
+  --adm-card: #FFFFFF;
+  --adm-card-border: #DCE4F0;       /* card outline (slightly bluer than --border) */
+  --adm-hairline: #E5E7EB;          /* dividers inside cards */
+  --adm-tile: #F1F5FB;              /* allocation tiles, segmented-control track, hover rows (#F8FAFC) */
+  --adm-track: #EAF0FA;             /* progress/gauge tracks */
+  --adm-nav-active: #D3E4FD;        /* active sidebar item bg */
+  --adm-selected-row: #F3F8FF;
+
+  /* semantic status (bg / fg / border) */
+  --adm-success-bg: #DCFCE7; --adm-success-fg: #15803D; --adm-success-bd: #BBF7D0;
+  --adm-warning-bg: #FEF3C7; --adm-warning-fg: #B45309; --adm-warning-bd: #FDE68A;
+  --adm-danger-bg:  #FEE2E2; --adm-danger-fg:  #B91C1C; --adm-danger-bd:  #FECACA;
+  --adm-info-bg:    #E8F1FE; --adm-info-fg:    #0556D1; --adm-info-bd:    #D3E4FD;
+  --adm-neutral-bg: #F1F5F9; --adm-neutral-fg: #475569; --adm-neutral-bd: #E2E8F0;
+  --adm-purple-bg:  #EDE9FE; --adm-purple-fg:  #6D28D9; --adm-purple-bd:  #DDD6FE;
+
+  /* chart */
+  --adm-chart-current: #0866F5;
+  --adm-chart-previous: #94A3B8;
+  --adm-chart-grid: #E5E9F2;
+  --adm-chart-axis: #CBD5E1;
+}
+
+
+
