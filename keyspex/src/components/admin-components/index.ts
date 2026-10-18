@@ -46,3 +46,23 @@ export * from "./AdminRoleSelector"
 export * from "./AdminLoginForm"
 export * from "./AdminLoginCard"
 export * from "./AdminLoginFooter"
+
+// Budget & Revenue Components
+export * from "./budget-revenue/BRTopKpiRow"
+export * from "./budget-revenue/RevenueVsBudgetChart"
+export * from "./budget-revenue/SpendBreakdownPanel"
+export * from "./budget-revenue/ProjectRealizationTable"
+export * from "./budget-revenue/CashFlowSummaryCard"
+export * from "./budget-revenue/StrategicForecastPanel"
+export * from "./budget-revenue/EditBudgetCapModal"
+
+// Payroll & Salaries Components
+export * from "./payroll/PayrollTopKpiRow"
+export * from "./payroll/PayrollRosterTable"
+export * from "./payroll/ProjectLaborCostCard"
+export * from "./payroll/DepartmentSpendCard"
+export * from "./payroll/DisbursementTimelineCard"
+export * from "./payroll/AddPayeeModal"
+export * from "./payroll/EditPayeeModal"
+
+

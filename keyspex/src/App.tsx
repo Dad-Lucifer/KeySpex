@@ -4,6 +4,8 @@ import { HomePage } from "@/pages/HomePage"
 
 const AdminLoginPage = lazy(() => import("@/pages/AdminLoginPage"))
 const AdminDashboardPage = lazy(() => import("@/pages/AdminDashboardPage"))
+const BudgetRevenuePage = lazy(() => import("@/pages/BudgetRevenuePage"))
+const PayrollPage = lazy(() => import("@/pages/PayrollPage"))
 
 export function App() {
   return (
@@ -28,6 +30,26 @@ export function App() {
           element={
             <Suspense fallback={<div className="min-h-screen bg-[#F8FAFC]" />}>
               <AdminDashboardPage />
+            </Suspense>
+          }
+        />
+
+        {/* Budget & Revenue Tracking System */}
+        <Route
+          path="/admin/budgets-revenue"
+          element={
+            <Suspense fallback={<div className="min-h-screen bg-[#F8FAFC]" />}>
+              <BudgetRevenuePage />
+            </Suspense>
+          }
+        />
+
+        {/* Total Project & Salaries Tracking System */}
+        <Route
+          path="/admin/payroll"
+          element={
+            <Suspense fallback={<div className="min-h-screen bg-[#F8FAFC]" />}>
+              <PayrollPage />
             </Suspense>
           }
         />
